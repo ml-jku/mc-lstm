@@ -14,7 +14,7 @@ we conducted the following experiments on a) arithmetic tasks (cf. [Madsen et al
 [Openreview](https://openreview.net/forum?id=Rld-9OxQ6HU)
 
 ### Code 
-The code is under preparation. 
+The code is under preparation and will be available here. 
 
 ### Citation
 
