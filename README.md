@@ -1,8 +1,7 @@
 # MC-LSTM: Mass-Conserving LSTM
+Pieter-Jan Hoedt, Frederik Kratzert, Daniel Klotz, Christina Halmich, Markus Holzleitner, Grey Nearing, Sepp Hochreiter, Günter Klambauer
 
-This repository is the central hub for the code of the experiments conducted in the MC-LSTM paper.
-Since we ended up using different code bases for certain experiments,
-the code has been spread over multiple repositories.
+The success of Convolutional Neural Networks (CNNs) in computer vision is mainly driven by their strong inductive bias,  which is strong enough to allow CNNs to solve vision-related tasks with random weights, meaning without learning. Similarly, Long Short-Term Memory (LSTM) has a strong inductive bias towards storing information over time. However, many real-world systems are governed by conservation laws, which lead to the redistribution of particular quantities —e.g. in physical and economical systems.   Our novel Mass-Conserving LSTM (MC-LSTM) adheres to these conservation laws by extending the inductive bias of LSTM to model the redistribution of those stored quantities. MC-LSTMs set a new state-of-the-art for neural arithmetic units at learning arithmetic operations, such as addition tasks, which have a strong conservation law, as the sum is constant overtime. Further, MC-LSTM is applied to traffic forecasting, modeling a pendulum, and a large benchmark dataset in hydrology, where it sets a new state-of-the-art for predicting peak flows. In the hydrology example, we show that MC-LSTM states correlate with real world processes and are therefore interpretable.
 
 MC-LSTM is an adaptation of LSTM [(Hochreiter & Schmidhuber, 1997)](#lstm) 
 that allows to enforce conservation laws in regression problems.
@@ -13,6 +12,8 @@ we conducted the following experiments:
 3. Energy prediction for pendulum (cf. [Greydanus et al., 2019](#hamiltonian))
 4. Rainfall-runoff modeling
 
+### Code 
+The code is under preparation. 
 
 ### Paper
 
