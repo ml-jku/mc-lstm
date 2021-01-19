@@ -6,7 +6,7 @@ The success of Convolutional Neural Networks (CNNs) in computer vision is mainly
 MC-LSTM is an adaptation of LSTM [(Hochreiter & Schmidhuber, 1997)](#lstm) 
 that allows to enforce conservation laws in regression problems.
 To test the benefits of this inductive bias in practice, 
-we conducted the following experiments on a) arithmetic tasks (cf. [Madsen et al., 2020](#nau)), b) Traffic forecasting, c) energy prediction for pendulum (cf. [Greydanus et al., 2019](#hamiltonian)), and d) Rainfall-runoff modeling [Kratzert et al., 2018](https://hess.copernicus.org/articles/22/6005/2018/). 
+we conducted the following experiments on a) arithmetic tasks (cf. [Madsen et al., 2020](#nau)), b) Traffic forecasting, c) energy prediction for pendulum (cf. [Greydanus et al., 2019](#hamiltonian)), and d) Rainfall-runoff modeling ([Kratzert et al., 2018](https://hess.copernicus.org/articles/22/6005/2018/)). 
 
 ### Paper
 [Pre-print](https://arxiv.org/abs/2101.05186])
