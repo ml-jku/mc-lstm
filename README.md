@@ -12,10 +12,14 @@ we conducted the following experiments:
 3. Energy prediction for pendulum (cf. [Greydanus et al., 2019](#hamiltonian))
 4. Rainfall-runoff modeling
 
+### Paper
+[Pre-print](https://arxiv.org/abs/2101.05186])
+[Openreview](https://openreview.net/forum?id=Rld-9OxQ6HU)
+
 ### Code 
 The code is under preparation. 
 
-### Paper
+### Citation
 
 To cite this work, you can use the following bibtex entry:
  ```bib
