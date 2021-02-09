@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
+from scipy.integrate import solve_ivp
 
 from sklearn.preprocessing import MinMaxScaler
 from torch.utils.data import Dataset
@@ -12,11 +13,8 @@ __author__ = "Christina Halmich, Daniel Klotz"
 def create_Oscillation(lam,
                        friction,
                        pendulum_length = 1,
-                       initial_amplitude = 0.3):
-    # Gravitational constant g in m/s^2
-    g = 9.81
-    #Mass in kg
-    m = 1
+                       initial_amplitude = 0.3,
+                       m=1., g=9.81):
     #Length of Pendulum in m
     r = pendulum_length
     #Initial amplitude
@@ -53,6 +51,50 @@ def create_Oscillation(lam,
             'Mass':m,#M
             'Initial Amplitude':a}#A
     df = pd.DataFrame(data, columns=['Time','Kinetic Energy','Potential Energy','Angle','Deflection','Damping Factor','Acceleration','Length of String','Mass','Initial Amplitude'])
+    return df
+
+
+def hnn_Oscillation(lam,
+                       friction,
+                       pendulum_length = 1.,
+                       initial_amplitude = 1.,
+                    m=.5, g=6):
+    #Length of Pendulum in m
+    r = pendulum_length
+    #Initial amplitude
+    a = initial_amplitude
+
+    if friction is True:
+        raise ValueError("Friction is not possible with the HNN data")
+
+    def _dynamics(t, coords):
+        q, p = coords.T
+        dhdq = m * g * r * np.sin(q)
+        dhdp = p / m
+        return np.c_[dhdp, -dhdq]
+
+    t = np.linspace(0, 25, 1000, endpoint=False)
+    res = solve_ivp(fun=_dynamics, t_span=[0, 25], y0=np.array([a, 0]), t_eval=t, rtol=1e-10)
+    y, p = res['y']
+    w = p / m
+    E_pot = m * g * r * (1 - np.cos(y))
+    E_kin = p ** 2 / (2 * m)
+    #Deflection
+    s = r*y
+
+    #Save dataset
+    data = {'Time': t,  #T
+            'Kinetic Energy': E_kin,  #K
+            'Potential Energy': E_pot, #P
+            'Angle':y,
+            'Velocity':w,
+            'Deflection':s,
+            'Damping Factor': lam, #Lam
+            'Acceleration': g,#G
+            'Length of String': r,#L
+            'Mass':m,#M
+            'Initial Amplitude':a}#A
+    df = pd.DataFrame(data, columns=['Time','Kinetic Energy','Potential Energy','Angle','Velocity','Deflection','Damping Factor','Acceleration','Length of String','Mass','Initial Amplitude'])
     return df
 
 
@@ -167,30 +209,36 @@ def get_split(test_len,
               friction,
               pendulum_length = 1,
               initial_amplitude = 0.3,
-              noise_std = 0.01
+              noise_std = 0.01,
+              hnn_regime=False,
               ):
     #get data
-    df = create_Oscillation(lam, friction,
-                            pendulum_length = pendulum_length,
-                            initial_amplitude = initial_amplitude)
+    if hnn_regime:
+        df = hnn_Oscillation(lam, friction, pendulum_length, initial_amplitude)
+    else:
+        df = create_Oscillation(lam, friction, pendulum_length, initial_amplitude)
 
     noise = np.random.normal(0, noise_std, size=df.shape)
     df += noise
     #
     d = df[['Kinetic Energy', 'Potential Energy']].values.astype(float)
     #aux_primary = df[['Angle', 'Deflection']].values.astype(float)
-    time_line = np.linspace(0, np.pi, df.shape[0])
-    aux = np.stack([
-        np.sin(10 * time_line),
-        np.sin(20 * time_line),
-        np.sin(30 * time_line),
-        np.sin(40 * time_line),
-        np.sin(50 * time_line),
-        np.sin(100 * time_line),
-        np.sin(200 * time_line),
-        np.sin(400 * time_line),
-        np.sin(600 * time_line)
-    ], axis=1)
+    if hnn_regime:
+        aux = np.stack([df['Angle'].to_numpy(), df['Velocity'].to_numpy()], axis=1)
+        aux /= np.abs(aux).max(axis=0)
+    else:
+        time_line = np.linspace(0, np.pi, df.shape[0])
+        aux = np.stack([
+            np.sin(10 * time_line),
+            np.sin(20 * time_line),
+            np.sin(30 * time_line),
+            np.sin(40 * time_line),
+            np.sin(50 * time_line),
+            np.sin(100 * time_line),
+            np.sin(200 * time_line),
+            np.sin(400 * time_line),
+            np.sin(600 * time_line)
+        ], axis=1)
     #aux = np.concatenate([aux_primary, time_marker], axis = 1)
 
     train = d[:-test_len]

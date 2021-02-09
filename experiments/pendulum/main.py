@@ -16,6 +16,7 @@ from pathlib import Path
 from experiments.pendulum.data import plot_training, plot_test, get_split, MyDataset
 from modelzoo.autoregressive import NoInputMassConserving, JustAnARLSTM
 
+
 def run_pendulum_experiment(cfg):
     # Define model type:
     modeltype = cfg['modeltype']
@@ -34,6 +35,7 @@ def run_pendulum_experiment(cfg):
     pendulum_length = cfg['pendulum_length']
     initial_amplitude = cfg['initial_amplitude']
     noise_std = cfg['noise_std']
+    hnn_regime = cfg['hnn_regime']
 
     # log-directory
     out_dir = Path("runs", cfg["experiment_name"])
@@ -68,7 +70,8 @@ def run_pendulum_experiment(cfg):
                     friction,
                     pendulum_length = pendulum_length,
                     initial_amplitude = initial_amplitude,
-                    noise_std=noise_std)
+                    noise_std=noise_std,
+                    hnn_regime=hnn_regime)
     train_cat = torch.cat((train, train_aux), dim=1)
     ds = MyDataset(train_cat, seq_len)
 
@@ -81,7 +84,8 @@ def run_pendulum_experiment(cfg):
                                       initial_output_bias=-5,
                                       scale_c=scale,
                                       hidden_layer_size=100,
-                                      friction=friction)
+                                      friction=friction,
+                                      aux_input_size=2 if hnn_regime else 9)
     elif modeltype == "AR-LSTM":
         model = JustAnARLSTM()
 

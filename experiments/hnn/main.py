@@ -9,9 +9,9 @@ from scipy.integrate import solve_ivp
 from torch import nn
 from pathlib import Path
 
-from experiments.pendulum.train_hnn import get_dataset, integrate_model
-from experiments.pendulum.data import plot_training2, plot_test2
-from experiments.utils import read_config
+from experiments.hnn.data import get_dataset, integrate_model
+from experiments.hnn.data import plot_training2, plot_test2
+from experiments.pendulum.main import run_pendulum_experiment
 from modelzoo.hnn import HNN, MLP
 
 import matplotlib.pyplot as plt
@@ -37,9 +37,6 @@ def run_hnn_experiment(cfg):
 
     # log directory
     out_dir = Path("runs", cfg["experiment_name"])
-    out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "figures").mkdir()
-    (out_dir / "figures_test").mkdir()
 
     # --------------------------------------------------------------------------
     # fixed settings found by student-descent:
@@ -122,7 +119,7 @@ def run_hnn_experiment(cfg):
     # save params
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print("training finished")
-    plt.semilogy(stats['train_loss']); plt.show()
+    # plt.semilogy(stats['train_loss']); plt.show()
 
     train_dxdt_hat = model.time_derivative(x)
     train_dist = (dxdt - train_dxdt_hat) ** 2
@@ -164,23 +161,53 @@ def run_hnn_experiment(cfg):
 
 
 if __name__ == '__main__':
-    import argparse
+    import argparse, random
+    # import feather
+    from experiments.utils import read_config
+    # ------------------------------------------------------------------------------
+    # get basic arguments from config-file:
     parser = argparse.ArgumentParser()
-    parser.add_argument("config", type=str, help="path to config file")
-    args = parser.parse_args()
+    parser.add_argument('--config-dir', type=str)
+    args = vars(parser.parse_args())
 
-    try:
-        cfg = read_config(Path(args.config))
-        hnn_data, hnn_mse = run_hnn_experiment(cfg)
-    except ValueError:
-        print("incompatible config for HNNs")
+    # ------------------------------------------------------------------------------
+    # read in config-files:
+    config_files = Path(args["config_dir"]).glob('*.yml')
 
-    mse_experiments = {"modeltype": cfg["modeltype"],
-                       "dampening_constant": cfg["dampening_constant"],
-                       "train_seq_length": cfg["train_seq_length"],
-                       "noise_std": cfg["noise_std"],
-                       "initial_amplitude": cfg["initial_amplitude"],
-                       "pendulum_length": cfg["pendulum_length"],
-                       "mse": hnn_mse}
-    mse_experiments = pd.DataFrame(mse_experiments, index=[0])
-    mse_experiments.to_csv(Path("runs", cfg["experiment_name"]) / f"mse_hnn.csv")
+    mse_experiments = []
+    idx = 0
+    for config_file in config_files:
+        idx += 1
+        cfg = read_config(Path(config_file))
+        cfg['hnn_regime'] = True
+
+        # ------------------------------------------------------------------------------
+        # set seeds:
+        if cfg["seed"] is None:
+            cfg["seed"] = int(np.random.uniform(low=0, high=1e6))
+        # fix random seeds for various packages
+        random.seed(cfg["seed"])
+        np.random.seed(cfg["seed"])
+        torch.cuda.manual_seed(cfg["seed"])
+        torch.manual_seed(cfg["seed"])
+
+        # ------------------------------------------------------------------------------
+        # conduct experiment:
+        test_data, final_mse = run_pendulum_experiment(cfg)
+
+        mse_experiments = {"modeltype": cfg["modeltype"],
+                           "dampening_constant": cfg["dampening_constant"],
+                           "train_seq_length": cfg["train_seq_length"],
+                           "noise_std": cfg["noise_std"],
+                           "initial_amplitude": cfg["initial_amplitude"],
+                           "pendulum_length": cfg["pendulum_length"],
+                           "mse": final_mse}
+
+        try:
+            hnn_data, hnn_mse = run_hnn_experiment(cfg)
+            mse_experiments["hnn_mse"] = hnn_mse
+        except ValueError:
+            print("incompatible config for HNNs")
+
+        mse_experiments = pd.DataFrame(mse_experiments, index=[0])
+        mse_experiments.to_csv(Path("runs", cfg["experiment_name"]) / f"mse.csv")

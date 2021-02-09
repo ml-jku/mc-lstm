@@ -17,7 +17,8 @@ class NoInputMassConserving(nn.Module):
                  batch_first: bool = True, 
                  initial_output_bias: float = None,
                  scale_c: bool = True,
-                 friction: bool = False):
+                 friction: bool = False,
+                 aux_input_size: int = 9):
         """
                     
         Parameters
@@ -59,7 +60,7 @@ class NoInputMassConserving(nn.Module):
         self.reset_parameters()
 
         self.embedder = nn.Sequential(
-            nn.Linear(self.hidden_size + 9, 50),
+            nn.Linear(self.hidden_size + aux_input_size, 50),
             nn.ReLU(),
             nn.Linear(50, 100),
             nn.ReLU()

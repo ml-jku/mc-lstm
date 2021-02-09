@@ -9,6 +9,7 @@ modeltype: MC-LSTM
 # data
 train_seq_length: 400
 dampening_constant: 0.0
-initial_amplitude: 1.0
+initial_amplitude: 0.2
 pendulum_length: 1.0
 noise_std: 0.0
+hnn_regime: false
