@@ -1,0 +1,14 @@
+# general
+experiment_name: pe
+create_plots: true
+seed: 111
+
+# model
+modeltype: MC-LSTM
+
+# data
+train_seq_length: 400
+dampening_constant: 0.0
+initial_amplitude: 1.0
+pendulum_length: 1.0
+noise_std: 0.0

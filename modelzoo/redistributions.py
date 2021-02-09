@@ -18,6 +18,8 @@ def get_redistribution(kind: str,
         return SingularRedistribution(num_states, num_features, num_out, normaliser, **kwargs)
     elif kind == "gate":
         return GateRedistribution(num_states, num_features, num_out, normaliser)
+    elif kind == "pendulum":
+        return PendulumRedistribution(num_states, num_features, kwargs['hidden_layer_size'], num_out, normaliser)
     else:
         raise ValueError("unknown kind of redistribution: {}".format(kind))
 
@@ -216,6 +218,51 @@ class SingularRedistribution(Redistribution):
         # NOTE: orthogonality of SVD matrices not guaranteed during learning!
         a = self.phi(self.fc(features))
         return self.u * a.unsqueeze(-2) @ self.v
+
+
+class PendulumRedistribution(Redistribution):
+    """
+    Gate-like redistribution that only depends on input.
+
+    This module directly computes all entries for the redistribution matrix
+    from a linear combination of the input values and is normalised by the activation function.
+    """
+
+    """
+    Parameters
+    ----------
+    num_states : int
+        The number of states this redistribution is to be applied on.
+    num_features : int, optional
+        The number of features to use for configuring the redistribution.
+        If the redistribution is not input-dependent, this argument will be ignored.
+    num_out : int, optional
+        The number of outputs to redistribute the states to.
+        If nothing is specified, the redistribution matrix is assumed to be square.
+    normaliser : Module, optional
+        Function to use for normalising the redistribution matrix.
+    """
+
+    def __init__(self, num_states, num_features, hidden_layer_size, num_out=None, normaliser=None):
+        super().__init__(num_states, num_features, num_out, normaliser)
+        #self.fc_1 = nn.Linear(num_features, hidden_layer_size)
+        #self.fc_2 = nn.Linear(hidden_layer_size, self.num_states * self.num_out)
+        self.fc = nn.Linear(num_features, self.num_states * self.num_out )
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        # TODO: account for effect normaliser
+        #nn.init.orthogonal_(self.fc_1.weight)
+        #nn.init.zeros_(self.fc_1.bias)
+        #nn.init.orthogonal_(self.fc_2.weight)
+        #nn.init.zeros_(self.fc_2.bias)
+        nn.init.xavier_normal_(self.fc.weight)
+        nn.init.uniform_(self.fc.bias)
+
+    def _compute(self, x: torch.Tensor) -> torch.Tensor:
+        #logits = self.fc_2(torch.relu(self.fc_1(x)))
+        logits = self.fc(x)
+        return logits.view(-1, self.num_states, self.num_out)
 
 
 if __name__ == "__main__":
