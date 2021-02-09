@@ -16,7 +16,7 @@ The experiments in hydrology were conducted using the [neuralhydrology](https://
 ## Paper
 
 [Openreview](https://openreview.net/forum?id=Rld-9OxQ6HU),
-[Pre-print](https://arxiv.org/abs/2101.05186])
+[Pre-print](https://arxiv.org/abs/2101.05186)
 
 ### Abstract
 
