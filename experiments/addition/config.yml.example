@@ -1,0 +1,31 @@
+# general
+experiment_name: mclstm_0.05_global_seed100
+global_seed: 100
+
+# model
+model: mclstm
+mass_input_size: 1
+aux_input_size: 1
+hidden_size: 10
+out_size: 1
+redistribution_type: linear
+initial_forget_bias: 0
+
+# data
+dataset: addition
+num_samples: 10000
+min_mass: 0.0
+max_mass: 0.5
+data_seed: 1806
+
+# learning
+lr: 0.05
+batch_size: 128
+num_epochs: 100
+
+# other
+num_workers: 8
+device: cuda
+log_tensorboard: true
+log_step: 5
+save_weights_every: 25
