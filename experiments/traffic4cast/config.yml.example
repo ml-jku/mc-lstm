@@ -1,0 +1,35 @@
+# general
+experiment_name: continuousdirectmclstm_hidden_size10_0.01
+global_seed: 123
+
+# model
+model: continuousdirectmclstm
+mass_input_size: 4
+aux_input_size: 1
+hidden_size: 10
+out_size: 4
+redistribution_type: gate
+initial_forget_bias: 5
+learn_initial_state: false
+initial_state: 0
+
+# data
+dataset: traffic4cast
+city: istanbul
+single_sample: false
+normalised: false
+time_diff: 0
+masking:
+valid_split: 0.85
+
+# learning
+lr: 1e-2
+batch_size: 32
+num_epochs: 2000
+
+# other
+num_workers: 4
+device: cuda
+log_tensorboard: true
+log_step: 5
+save_weights_every: 100
