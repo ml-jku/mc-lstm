@@ -188,8 +188,9 @@ def run_pendulum_experiment(cfg):
     test_data = pd.DataFrame({
         "obs_kin":df['Kinetic Energy'][-test_len:(-test_len+500)], # use test_len to avoiud + 1, fix mse for 500 timesteps
         "obs_pot":df['Potential Energy'][-test_len:(-test_len+500)],
-        "sim_kin":actual_predictions[-test_len:(-test_len+500),0],
-        "sim_pot":actual_predictions[-test_len:(-test_len+500),0] })
+        "sim_kin":actual_predictions[-test_len:(-test_len+500), 0],
+        "sim_pot":actual_predictions[-test_len:(-test_len+500), 1],
+    })
 
     # a bit ugly
     test_mse = 0.5*np.mean((test_data["obs_kin"] - test_data["sim_kin"])**2)    # mse kinetic energy
