@@ -77,22 +77,35 @@ class NoInputMassConserving(nn.Module):
                 ct_v: torch.Tensor = None,
                 ct_a: torch.Tensor = None,
                 xa: torch.Tensor = None,
-                ):# -> Tuple[torch.Tensor, torch.Tensor]:
+                expose_redistribution=False):# -> Tuple[torch.Tensor, torch.Tensor]:
         ct = init_state
 
-        m_out, c = [], []
+        m_out, c, r = [], [], []
         c.append(ct)
 
         for t in range(n_time_steps):
             hz = torch.cat([ct, xa[:, t]], dim=1)
             conc = self.embedder(hz)
-            mt_out, ct = self._step(ct, conc)
+            mt_out, ct, rt = self._step(ct, conc)
             m_out.append(mt_out)
             c.append(1.02*ct - 0.01)   #D: important so that softmax does not go to extremes
-        m_out, c = torch.stack(m_out), torch.stack(c)
+
+            # pytorch > 1.6 could use
+            # r.append(torch.diagonal(torch.fliplr(rt)[0]))
+            fliplr = torch.from_numpy(rt.detach().numpy()[:, ::-1].copy())
+            anti_diagonal = torch.diagonal(fliplr[0])
+            r.append(anti_diagonal)
+
+        m_out, c, r = torch.stack(m_out), torch.stack(c), torch.stack(r)
+        r = r.unsqueeze(1)
         if self.batch_first:
             m_out = m_out.transpose(0, 1)
             c = c.transpose(0, 1)
+            r = r.transpose(0, 1)
+
+        if expose_redistribution:
+            return m_out, c, r
+
         return m_out, c
 
     def _step(self, ct: torch.Tensor, conc: torch.Tensor):# -> Tuple[torch.Tensor, torch.Tensor]:
@@ -106,7 +119,7 @@ class NoInputMassConserving(nn.Module):
             o = self.out_gate(ct)
             c_out = (1 - o) * c_out
             mt_out = o * c_out
-        return mt_out,  c_out
+        return mt_out,  c_out, r
 
 
 class JustAnARLSTM(nn.Module):

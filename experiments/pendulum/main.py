@@ -13,7 +13,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 from pathlib import Path
 
-from experiments.pendulum.data import plot_training, plot_test, get_split, MyDataset
+from experiments.pendulum.data import plot_training, plot_test, get_split, MyDataset, plot_r
 from modelzoo.autoregressive import NoInputMassConserving, JustAnARLSTM
 
 
@@ -145,6 +145,21 @@ def run_pendulum_experiment(cfg):
                           friction,
                           seq_len,
                           title_appendix=f'(epoch {i})')
+
+    if cfg["create_plots"] and modeltype == "MC-LSTM":
+        with torch.no_grad():
+            _, _, r = model(xm[:, 0], seq_len - 1, xa=xa, expose_redistribution=True)
+        name = f"plot_{modeltype}_Redistribution_{friction_addendum}_idx{plot_idx:03d}.pdf"
+        plot_r(out_dir / "figures" / name,
+               df['Time'],
+               r.squeeze(0).numpy(),
+               df['Kinetic Energy'],
+               df['Potential Energy'],
+               friction,
+               seq_len,
+               True,
+               False,
+               title_appendix=f'(epoch {i})')
 
     # --------------------------------------------------------------------------
     # save params

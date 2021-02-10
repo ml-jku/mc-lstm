@@ -203,6 +203,32 @@ def plot_test(out_file,
     plt.clf()
     plt.close('all')
 
+def plot_r(out_file, t, r, E_kin, E_pot, friction, seq_len, grid_on, inline_on, title_appendix):
+    fig, axs = plt.subplots(2, 1, figsize=(15, 15))
+    axs[0].plot(t[1:seq_len], r[:, 0], label=r'Flow: $E_{pot}$ to $E_{kin}$', c="tomato", linewidth=3)
+    axs[0].plot(t[1:seq_len], r[:, 1], label=r'Flow: $E_{kin}$ to $E_{pot}$', c="steelblue", linewidth=3,
+                linestyle='dashed')
+    # axs[0].set_xlabel('time',fontsize=30)
+    axs[0].set_ylabel('Fraction of moving Energy', fontsize=30)
+    axs[0].grid(grid_on, c="gainsboro")
+    axs[0].autoscale(axis='t')
+    axs[0].tick_params(axis='both', which='major', labelsize=25)
+    axs[0].xaxis.label.set_size(30)
+    axs[0].yaxis.label.set_size(30)
+    axs[0].legend(loc='upper right', fontsize=30)  # bbox_to_anchor=(1, 0.5),
+    axs[1].plot(t[1:seq_len], E_kin[1:seq_len], label=r'$E_{kin}$', c="magenta", linewidth=3, linestyle='dashed')
+    axs[1].plot(t[1:seq_len], E_pot[1:seq_len], label=r'$E_{pot}$', c="cyan", linewidth=3)
+    axs[1].set_xlabel('Time in s', fontsize=30)
+    axs[1].set_ylabel('Energy in J', fontsize=30)
+    axs[1].grid(grid_on, c="gainsboro")
+    axs[1].legend(loc='upper right', fontsize=30)
+    axs[1].tick_params(axis='both', which='major', labelsize=25)
+    # fig.legend(loc='center left', bbox_to_anchor=(1, 0.5))#bbox_to_anchor=(1.05, 1), loc='upper left')
+    # plt.rcParams.update({'font.size': 18})
+    plt.savefig(out_file, bbox_inches='tight')
+    plt.close('all')
+    plt.clf()
+
 
 def get_split(test_len,
               norm,
