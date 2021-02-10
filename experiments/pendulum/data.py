@@ -44,13 +44,14 @@ def create_Oscillation(lam,
             'Kinetic Energy': E_kin,  #K
             'Potential Energy': E_pot, #P
             'Angle':y,
+            'Velocity': w,
             'Deflection':s,
             'Damping Factor': lam, #Lam
             'Acceleration': g,#G
             'Length of String': r,#L
             'Mass':m,#M
             'Initial Amplitude':a}#A
-    df = pd.DataFrame(data, columns=['Time','Kinetic Energy','Potential Energy','Angle','Deflection','Damping Factor','Acceleration','Length of String','Mass','Initial Amplitude'])
+    df = pd.DataFrame(data, columns=['Time','Kinetic Energy','Potential Energy','Angle','Velocity','Deflection','Damping Factor','Acceleration','Length of String','Mass','Initial Amplitude'])
     return df
 
 

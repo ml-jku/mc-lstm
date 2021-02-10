@@ -72,7 +72,7 @@ def get_dataset_osc(seed=0, samples=50, test_split=0.5, radius=None, damping=0, 
     if radius is None:
         radius = np.random.uniform(0, 0.4)
 
-    df = create_Oscillation(damping, damping > 0, pendulum_length=1, initial_amplitude=radius)
+    df = create_Oscillation(damping, damping > 0, pendulum_length=1, initial_amplitude=radius, m=m, g=g)
 
     xs, dxs = [], []
     for s in range(samples):
