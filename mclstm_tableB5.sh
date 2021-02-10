@@ -3,6 +3,7 @@
 NUM_RUNS=50
 EXP_NAME=traffic4cast
 
+export PYTHONPATH=".";
 mkdir "${EXP_NAME}_configs";
 
 # generate configs
@@ -79,7 +80,6 @@ mv utils/generated_configs/*.yml "${EXP_NAME}_configs" && \
 rm -d utils/generated_configs;
 
 # train all models
-export PYTHONPATH=".";
 ls "${EXP_NAME}_configs"/*.yml | xargs -n1 -P10 -i -- \
 python experiments/traffic4cast/train.py --config {};
 mkdir "${EXP_NAME}_runs";
@@ -92,5 +92,4 @@ python experiments/traffic4cast/test.py --run_dir "${EXP_NAME}_runs" --experimen
 python experiments/traffic4cast/test.py --run_dir "${EXP_NAME}_runs" --experiment "istanbul_continuousdirectmclstm*";
 python experiments/traffic4cast/test.py --run_dir "${EXP_NAME}_runs" --experiment "moscow_continuouslstm*";
 python experiments/traffic4cast/test.py --run_dir "${EXP_NAME}_runs" --experiment "moscow_continuousdirectmclstm*";
-
-
+unset PYTHONPATH;

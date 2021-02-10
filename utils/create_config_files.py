@@ -1,6 +1,5 @@
 """Utility script to generate config files from a base config and a defined set of variations"""
 import argparse
-import ast
 import itertools
 import sys
 from pathlib import Path

@@ -1,5 +1,7 @@
 #/usr/bin/env sh
 
+export PYTHONPATH=".";
+
 # train mclstm with sum instead of fc
 python utils/create_config_files.py \
   --base_config experiments/addition/config.yml.example \
@@ -27,3 +29,4 @@ fig.gca().set_ylim(-.1, 3.1)
 fig.savefig("analysis_lstm_addition.pdf")
 END;
 rm -r runs/sum_mclstm_*;
+unset PYTHONPATH;

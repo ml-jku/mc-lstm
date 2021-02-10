@@ -4,6 +4,7 @@ NUM_RUNS=100
 EXP_NAME=lstm_addition
 
 mkdir "${EXP_NAME}_configs";
+export PYTHONPATH=".";
 
 # generate configs
 python utils/create_config_files.py \
@@ -51,5 +52,4 @@ python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "m
 python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "lstm*";
 python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "nalu*";
 python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "nau*";
-
-
+unset PYTHONPATH;

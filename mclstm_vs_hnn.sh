@@ -22,3 +22,4 @@ rm -d utils/generated_configs;
 python experiments/hnn/main.py --config-dir "${EXP_NAME}_configs";
 mkdir "${EXP_NAME}_runs";
 mv runs/* "${EXP_NAME}_runs";
+unset PYTHONPATH;
