@@ -1,3 +1,9 @@
+###################################################################################################
+# This file is meant to be used in context with the neuralhydrology library                       #
+# https://github.com/neuralhydrology/neuralhydrology for the hydrology experiments. See the       #
+# README.md under experiments/hydrology/README.md for details.                                    #
+###################################################################################################
+
 from typing import Dict, Tuple
 
 import torch
@@ -10,8 +16,8 @@ from neuralhydrology.utils.config import Config
 class MCLSTM(BaseModel):
     """MCLSTM-variant used for the ablation study.
 
-    This model class is only used for the ablation study. If you want to reprodue the results, please copy this file
-    content into `neuralhydrology/modelzoo/mclstm.py`.
+    This model class is only used for the ablation study. If you want to reprodue the results, 
+    please copy this file content into `neuralhydrology/modelzoo/mclstm.py`.
 
     Supports the following model configurations for the ablation study:
     - No mass conservation in the input gate (set `mclstm_i_normaliser` to `sigmoid`)
