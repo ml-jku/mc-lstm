@@ -77,7 +77,7 @@ from within the neuralHydrology root directory if you don't have the library ins
 
 ## 8. Ablation study
 
-For the ablation study reported in the appendix, substitute the `mclstm.py` file content in the modelzoo of the neuralHydrology library (`neuralhydrology/modelzoo/mclstm.py`) with the content of the `mclstm_ablation.py` file. The different model configurations can then be defined in the config by:
+For the ablation study reported in the appendix, substitute the `mclstm.py` file content in the modelzoo of the neuralHydrology library (`neuralhydrology/modelzoo/mclstm.py`) with the content of the `modelzoo/hydro_ablation.py` file. The different model configurations can then be defined in the config by:
 
 - `mclstm_i_normaliser: sigmoid`: Uses a standard sigmoid function in the input gate instead of the normalised sigmoid (i.e. breaking mass conservation in the input gate).
 - `mclstm_r_normaliser: linear`: Removes the activation function from the redistribution matrix (i.e. breaking mass conservation in the redistribution process).
