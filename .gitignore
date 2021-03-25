@@ -1,5 +1,6 @@
 **/*runs/
 **/*.yml
+!experiments/hydrology/*.yml
 **/*.pdf
 **/*.tar
 **/*.png
