@@ -40,6 +40,24 @@ rename config_ config4_ utils/generated_configs/*.yml && \
 mv utils/generated_configs/*.yml "${EXP_NAME}_configs" && \
 rm -d utils/generated_configs;
 
+# additional baselines
+python utils/create_config_files.py \
+  --base_config experiments/addition/config.yml.example \
+  --seeds 1 $NUM_RUNS \
+  --change model "lnlstm" \
+  --change lr 1e-3 && \
+rename config_ config5_ utils/generated_configs/*.yml && \
+mv utils/generated_configs/*.yml "${EXP_NAME}_configs" && \
+rm -d utils/generated_configs;
+python utils/create_config_files.py \
+  --base_config experiments/addition/config.yml.example \
+  --seeds 1 $NUM_RUNS \
+  --change model "urnn" \
+  --change lr 1e-3 && \
+rename config_ config6_ utils/generated_configs/*.yml && \
+mv utils/generated_configs/*.yml "${EXP_NAME}_configs" && \
+rm -d utils/generated_configs;
+
 # train all models
 export PYTHONPATH=".";
 ls "${EXP_NAME}_configs"/*.yml | xargs -n1 -P10 -i -- \
@@ -52,4 +70,6 @@ python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "m
 python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "lstm*";
 python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "nalu*";
 python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "nau*";
+python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "lnlstm*";
+python experiments/addition/test.py --run_dir "${EXP_NAME}_runs" --experiment "urnn*";
 unset PYTHONPATH;

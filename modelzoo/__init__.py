@@ -6,7 +6,7 @@ __author__ = "Frederik Kratzert, Pieter-Jan Hoedt"
 
 from .ablations import RLSTMModel, NoNormModel, NoNormSum, AlmostMCRLSTMModel, LinearRLSTMModel, NoMCOutModel
 from .nalu import RecurrentNAU, RecurrentNALU
-from .baselines import LSTM
+from .baselines import LSTM, LayerNormalisedLSTM, UnitaryRNN
 from .mclstm import MCModel, MCWrappedModel, MCProd, MCSum
 from .continuous_prediction import CMCModel, CLSTM, CMCOut
 
@@ -22,6 +22,10 @@ def get_model(cfg: dict):
         return MCProd(cfg)
     elif cfg['model'] == 'lstm':
         return LSTM(cfg)
+    elif cfg['model'] == 'lnlstm':
+        return LayerNormalisedLSTM(cfg)
+    elif cfg['model'] == 'urnn':
+        return UnitaryRNN(cfg)
     elif cfg['model'] == 'rlstm':
         return RLSTMModel(cfg)
     elif cfg['model'] == 'nonormmclstm':
