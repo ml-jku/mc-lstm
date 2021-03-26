@@ -38,7 +38,18 @@ To cite this work, you can use the following bibtex entry:
 }
 ```
 
-### References
+## Environment
+
+The code in this repository (excluding the sub-repositories) should run as-is in an environment as specified by `requirements.txt`.
+When using `conda`, such an environment can be set up using
+```
+conda create -n mclstm --file requirements.txt -c pytorch
+```
+**if** you remove the `autograd` dependency!
+`autograd` must be installed with `pip` individually. 
+Alternatively, you can use `-c conda-forge`, which does provide `autograd`.
+
+## References
 
  - <span id="hamiltonian">Greydanus, S., Dzamba, M., & Yosinski, J. (2019).</span> [Hamiltonian neural networks](https://proceedings.neurips.cc/paper/2019/hash/26cd8ecadce0d4efd6cc8a8725cbd1f8-Abstract.html). Advances in Neural Information Processing Systems, 32, 15379-15389.
  - <span id="lstm">Hochreiter, S., & Schmidhuber, J. (1997).</span> [Long short-term memory](https://www.mitpressjournals.org/doi/abs/10.1162/neco.1997.9.8.1735). Neural computation, 9(8), 1735-1780. ([pdf](https://www.bioinf.jku.at/publications/older/2604.pdf))
