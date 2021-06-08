@@ -99,7 +99,8 @@ class MassConservingLSTM(nn.Module):
     @torch.no_grad()
     def init_state(self, batch_size: int):
         """ Create the default initial state. """
-        return torch.zeros(batch_size, self.out_dim)
+        device = next(self.parameters()).device
+        return torch.zeros(batch_size, self.out_dim, device=device)
 
     def _step(self, xm_t, xa_t, c_t):
         """ Implementation of MC-LSTM recurrence. """
