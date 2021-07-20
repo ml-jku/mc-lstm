@@ -16,7 +16,8 @@ The experiments in hydrology were conducted using the [neuralhydrology](https://
 ## Paper
 
 [Openreview](https://openreview.net/forum?id=Rld-9OxQ6HU),
-[Pre-print](https://arxiv.org/abs/2101.05186)
+[Pre-print](https://arxiv.org/abs/2101.05186),
+[ICML](http://proceedings.mlr.press/v139/hoedt21a.html)
 
 ### Abstract
 
@@ -26,16 +27,21 @@ The success of Convolutional Neural Networks (CNNs) in computer vision is mainly
 
 To cite this work, you can use the following bibtex entry:
  ```bib
-@report{mclstm,
-	author = {Hoedt, Pieter-Jan and Kratzert, Frederik and Klotz, Daniel and Halmich, Christina and Holzleitner, Markus and Nearing, Grey and Hochreiter, Sepp and Klambauer, G{\"u}nter},
-	title = {MC-LSTM: Mass-Conserving LSTM},
-	institution = {Institute for Machine Learning, Johannes Kepler University, Linz},
-	type = {preprint},
-	date = {2021},
-	url = {http://arxiv.org/abs/2101.05186},
-	eprinttype = {arxiv},
-	eprint = {2101.05186},
+@inproceedings{pmlr-v139-hoedt21a,
+  title     = {MC-LSTM: Mass-Conserving LSTM},
+  author    = {Hoedt, Pieter-Jan and Kratzert, Frederik and Klotz, Daniel and Halmich, Christina and Holzleitner, Markus and Nearing, Grey S and Hochreiter, Sepp and Klambauer, Guenter},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
+  pages     = {4275--4286},
+  year      = {2021},
+  editor    = {Meila, Marina and Zhang, Tong},
+  volume    = {139},
+  series    = {Proceedings of Machine Learning Research},
+  month     = {18--24 Jul},
+  publisher = {PMLR},
+  pdf       = {http://proceedings.mlr.press/v139/hoedt21a/hoedt21a.pdf},
+  url       = {http://proceedings.mlr.press/v139/hoedt21a.html},
 }
+
 ```
 
 ## Environment
